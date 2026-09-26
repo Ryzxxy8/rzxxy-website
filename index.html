@@ -587,12 +587,30 @@ footer {
     <br><br>
     Built for the future.
 </footer>
+    <script>
 
-<script>
+// =====================================
+// RZXXY AI - REAL AI CHAT SYSTEM
+// =====================================
 
 const input = document.getElementById("userInput");
+
 const messages = document.getElementById("messages");
+
 const typing = document.getElementById("typing");
+
+const sendBtn = document.querySelector(".send-btn");
+
+// Store conversation history
+let chatHistory = [];
+
+// Prevent multiple requests at the same time
+let isLoading = false;
+
+
+// =====================================
+// ADD MESSAGE TO CHAT UI
+// =====================================
 
 function addMessage(text, type) {
 
@@ -600,111 +618,187 @@ function addMessage(text, type) {
 
     div.className = "message " + type;
 
-    // Display text safely
+    // Safe text display
     div.textContent = text;
 
     messages.appendChild(div);
 
     messages.scrollTop = messages.scrollHeight;
+
 }
 
-function getAIResponse(text) {
 
-    const msg = text.toLowerCase();
+// =====================================
+// SEND MESSAGE TO REAL AI BACKEND
+// =====================================
 
-    if (
-        msg.includes("hello") ||
-        msg.includes("hi") ||
-        msg.includes("မင်္ဂလာ")
-    ) {
-        return "မင်္ဂလာပါ! 👋 RZXXY AI မှ ကြိုဆိုပါတယ်။ ဘာကူညီပေးရမလဲ?";
-    }
-
-    if (
-        msg.includes("who are you") ||
-        msg.includes("မင်းဘယ်သူ")
-    ) {
-        return "I'm RZXXY AI, a demo chatbot created for the RZXXY website. 🤖";
-    }
-
-    if (
-        msg.includes("what can you do") ||
-        msg.includes("ဘာလုပ်နိုင်")
-    ) {
-        return "လက်ရှိ Demo Version မှာ အခြေခံမေးခွန်းတွေကို ဖြေပေးနိုင်တယ်။ တကယ့် AI API ချိတ်ဆက်ပြီးရင် ပိုမိုအဆင့်မြင့်တဲ့ မေးခွန်းတွေကို ဖြေနိုင်မယ်။";
-    }
-
-    if (
-        msg.includes("business") ||
-        msg.includes("စီးပွား") ||
-        msg.includes("လုပ်ငန်း")
-    ) {
-        return "💡 Business Idea: Online မှာ အမျိုးသား T-shirt တွေကို Pre-order စနစ်နဲ့ ရောင်းချကြည့်ပါ။ Sample အနည်းငယ်နဲ့ စပြီး Customer ရှာနိုင်တယ်။";
-    }
-
-    if (
-        msg.includes("ai") ||
-        msg.includes("artificial intelligence")
-    ) {
-        return "AI ဆိုတာ Artificial Intelligence ပါ။ စာရေးခြင်း၊ ဘာသာပြန်ခြင်း၊ ပုံဖန်တီးခြင်းနဲ့ Coding တို့မှာ အသုံးပြုနိုင်တယ်။";
-    }
-
-    if (
-        msg.includes("website") ||
-        msg.includes("vercel") ||
-        msg.includes("github")
-    ) {
-        return "🌐 မင်းရဲ့ Website ကို GitHub မှာ Code သိမ်းပြီး Vercel နဲ့ Deploy လုပ်ထားတာပါ။ Code ပြင်ပြီး Commit လုပ်ရင် Vercel က ပြန် Deploy လုပ်ပေးနိုင်တယ်။";
-    }
-
-    if (
-        msg.includes("thank")
-    ) {
-        return "You're welcome! 😊 မေးချင်တာရှိရင် ထပ်မေးနိုင်ပါတယ်။";
-    }
-
-    return "စိတ်ဝင်စားစရာ မေးခွန်းပါ! 😊 လက်ရှိ RZXXY AI က Demo Version ဖြစ်လို့ အခြေခံမေးခွန်းတွေကိုပဲ ဖြေနိုင်သေးတယ်။ တကယ့် AI API ချိတ်ဆက်ပြီးရင် ပိုမိုအသိဉာဏ်ရှိတဲ့ အဖြေတွေ ပေးနိုင်မယ်။";
-}
-
-function sendMessage() {
+async function sendMessage() {
 
     const text = input.value.trim();
 
+    // Prevent empty messages
     if (!text) return;
 
+    // Prevent duplicate requests
+    if (isLoading) return;
+
+    // Show user message
     addMessage(text, "user");
 
+    // Clear input
     input.value = "";
+
+    // Set loading state
+    isLoading = true;
+
+    sendBtn.disabled = true;
+
+    sendBtn.style.opacity = "0.5";
 
     typing.style.display = "block";
 
     messages.scrollTop = messages.scrollHeight;
 
-    setTimeout(() => {
 
-        typing.style.display = "none";
+    // Add user message to conversation history
+    chatHistory.push({
+        role: "user",
+        content: text
+    });
 
-        const reply = getAIResponse(text);
 
+    try {
+
+        // Connect to Vercel Backend
+        const response = await fetch("/api/chat", {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+
+                messages: chatHistory
+
+            })
+
+        });
+
+
+        // Read response
+        const data = await response.json();
+
+
+        // Handle API errors
+        if (!response.ok) {
+
+            throw new Error(
+                data.error || "AI request failed."
+            );
+
+        }
+
+
+        // Get AI response
+        const reply = data.reply;
+
+
+        if (!reply) {
+
+            throw new Error("No AI response received.");
+
+        }
+
+
+        // Save AI response to conversation history
+        chatHistory.push({
+
+            role: "assistant",
+
+            content: reply
+
+        });
+
+
+        // Show AI response
         addMessage(reply, "bot");
 
-    }, 900);
+
+    } catch (error) {
+
+        console.error("RZXXY AI Error:", error);
+
+        addMessage(
+            "တောင်းပန်ပါတယ်။ AI ချိတ်ဆက်မှုမှာ ပြဿနာရှိနေပါတယ်။\n\n" +
+            "API Key၊ Vercel Deployment နဲ့ API Billing ကို စစ်ဆေးပြီး ထပ်ကြိုးစားပါ။",
+            "bot"
+        );
+
+        // Remove failed user message from history
+        chatHistory.pop();
+
+
+    } finally {
+
+        // Hide typing indicator
+        typing.style.display = "none";
+
+        // Enable send button
+        isLoading = false;
+
+        sendBtn.disabled = false;
+
+        sendBtn.style.opacity = "1";
+
+        // Scroll to latest message
+        messages.scrollTop = messages.scrollHeight;
+
+        input.focus();
+
+    }
+
 }
 
+
+// =====================================
+// QUICK SUGGESTION BUTTONS
+// =====================================
+
 function quickAsk(text) {
+
+    if (isLoading) return;
+
     input.value = text;
+
     sendMessage();
+
 }
+
+
+// =====================================
+// ENTER KEY TO SEND MESSAGE
+// =====================================
 
 input.addEventListener("keydown", function(event) {
 
     if (event.key === "Enter") {
+
+        event.preventDefault();
+
         sendMessage();
+
     }
 
 });
 
+
+// =====================================
+// INITIALIZATION
+// =====================================
+
+console.log("RZXXY AI Chat System Loaded");
+
 </script>
 
-</body>
-</html>
