@@ -588,217 +588,25 @@ footer {
     Built for the future.
 </footer>
     <script>
-
-// =====================================
-// RZXXY AI - REAL AI CHAT SYSTEM
-// =====================================
-
-const input = document.getElementById("userInput");
-
-const messages = document.getElementById("messages");
-
-const typing = document.getElementById("typing");
-
-const sendBtn = document.querySelector(".send-btn");
-
-// Store conversation history
-let chatHistory = [];
-
-// Prevent multiple requests at the same time
-let isLoading = false;
-
-
-// =====================================
-// ADD MESSAGE TO CHAT UI
-// =====================================
-
-function addMessage(text, type) {
-
-    const div = document.createElement("div");
-
-    div.className = "message " + type;
-
-    // Safe text display
-    div.textContent = text;
-
-    messages.appendChild(div);
-
-    messages.scrollTop = messages.scrollHeight;
-
+const input=document.getElementById("userInput");
+const messages=document.getElementById("messages");
+const typing=document.getElementById("typing");
+const sendBtn=document.querySelector(".send-btn");
+let isLoading=false;
+function addMessage(text,type){const div=document.createElement("div");div.className="message "+type;div.textContent=text;messages.appendChild(div);messages.scrollTop=messages.scrollHeight;}
+function localReply(text){
+ const q=text.toLowerCase();
+ if(/မင်္ဂလာပါ|hello|hi\b|ဟိုင်း/.test(q)) return "မင်္ဂလာပါ! 👋 ကျွန်တော် RZXXY AI Demo ပါ။ ဘာကူညီပေးရမလဲ?";
+ if(/ဘာလုပ်နိုင်|what can you do|လုပ်နိုင်/.test(q)) return "ကျွန်တော်က API မလိုတဲ့ Demo Assistant ပါ။ Business idea, coding အခြေခံ၊ AI အကြောင်းနဲ့ အထွေထွေမေးခွန်းတွေကို ကြိုတင်သတ်မှတ်ထားတဲ့ demo အဖြေတွေနဲ့ ကူညီနိုင်ပါတယ်။";
+ if(/business|စီးပွား|လုပ်ငန်း|စီးပွါး/.test(q)) return "💡 စီးပွားရေး Idea: အရင်းအနှီးနည်းနည်းနဲ့ pre-order အမျိုးသား T-shirt ဆိုင်စတင်ပါ။ Sample ၂-၃ မျိုး၊ TikTok/Reels content နဲ့ စမ်းသပ်ပြီး အော်ဒါရမှ ပစ္စည်းမှာယူပါ။ ဒါက demo အကြံပြုချက်ပါ—ဈေးကွက်ကို ကိုယ်တိုင်စစ်ဆေးပါ။";
+ if(/ai\b|artificial intelligence|ဉာဏ်ရည်တု/.test(q)) return "AI (Artificial Intelligence) ဆိုတာ ဒေတာကနေ ပုံစံတွေသင်ယူပြီး စာသား၊ ပုံ၊ အသံ စတဲ့အလုပ်တွေမှာ ကူညီပေးတဲ့ နည်းပညာပါ။ ဒီ website ရဲ့ လက်ရှိအဖြေက local demo ဖြစ်ပြီး live AI model မဟုတ်ပါဘူး။";
+ if(/code|coding|html|javascript|python|ကုဒ်/.test(q)) return "💻 Coding စတင်လေ့လာဖို့ HTML (ဖွဲ့စည်းပုံ) → CSS (ဒီဇိုင်း) → JavaScript (လုပ်ဆောင်ချက်) အစဉ်လိုက်လေ့လာပါ။";
+ if(/thank|ကျေးဇူး/.test(q)) return "ရပါတယ်! 😊 နောက်ထပ်မေးခွန်းရှိရင် မေးနိုင်ပါတယ်။";
+ return "ဒီ RZXXY AI က API မသုံးတဲ့ Demo Mode ဖြစ်ပါတယ်။ အခုမေးခွန်းအတွက် live AI အဖြေမထုတ်နိုင်သေးပါဘူး။ API ချိတ်ဆက်မှုမရှိဘဲ ကြိုတင်သတ်မှတ်ထားတဲ့ ဥပမာအဖြေတွေကိုသာ ပြန်ပေးနိုင်ပါတယ်။";
 }
-
-
-// =====================================
-// SEND MESSAGE TO REAL AI BACKEND
-// =====================================
-
-async function sendMessage() {
-
-    const text = input.value.trim();
-
-    // Prevent empty messages
-    if (!text) return;
-
-    // Prevent duplicate requests
-    if (isLoading) return;
-
-    // Show user message
-    addMessage(text, "user");
-
-    // Clear input
-    input.value = "";
-
-    // Set loading state
-    isLoading = true;
-
-    sendBtn.disabled = true;
-
-    sendBtn.style.opacity = "0.5";
-
-    typing.style.display = "block";
-
-    messages.scrollTop = messages.scrollHeight;
-
-
-    // Add user message to conversation history
-    chatHistory.push({
-        role: "user",
-        content: text
-    });
-
-
-    try {
-
-        // Connect to Vercel Backend
-        const response = await fetch("/api/chat", {
-
-            method: "POST",
-
-            headers: {
-                "Content-Type": "application/json"
-            },
-
-            body: JSON.stringify({
-
-                messages: chatHistory
-
-            })
-
-        });
-
-
-        // Read response
-        const data = await response.json();
-
-
-        // Handle API errors
-        if (!response.ok) {
-
-            throw new Error(
-                data.error || "AI request failed."
-            );
-
-        }
-
-
-        // Get AI response
-        const reply = data.reply;
-
-
-        if (!reply) {
-
-            throw new Error("No AI response received.");
-
-        }
-
-
-        // Save AI response to conversation history
-        chatHistory.push({
-
-            role: "assistant",
-
-            content: reply
-
-        });
-
-
-        // Show AI response
-        addMessage(reply, "bot");
-
-
-    } catch (error) {
-
-        console.error("RZXXY AI Error:", error);
-
-        addMessage(
-            "တောင်းပန်ပါတယ်။ AI ချိတ်ဆက်မှုမှာ ပြဿနာရှိနေပါတယ်။\n\n" +
-            "API Key၊ Vercel Deployment နဲ့ API Billing ကို စစ်ဆေးပြီး ထပ်ကြိုးစားပါ။",
-            "bot"
-        );
-
-        // Remove failed user message from history
-        chatHistory.pop();
-
-
-    } finally {
-
-        // Hide typing indicator
-        typing.style.display = "none";
-
-        // Enable send button
-        isLoading = false;
-
-        sendBtn.disabled = false;
-
-        sendBtn.style.opacity = "1";
-
-        // Scroll to latest message
-        messages.scrollTop = messages.scrollHeight;
-
-        input.focus();
-
-    }
-
-}
-
-
-// =====================================
-// QUICK SUGGESTION BUTTONS
-// =====================================
-
-function quickAsk(text) {
-
-    if (isLoading) return;
-
-    input.value = text;
-
-    sendMessage();
-
-}
-
-
-// =====================================
-// ENTER KEY TO SEND MESSAGE
-// =====================================
-
-input.addEventListener("keydown", function(event) {
-
-    if (event.key === "Enter") {
-
-        event.preventDefault();
-
-        sendMessage();
-
-    }
-
-});
-
-
-// =====================================
-// INITIALIZATION
-// =====================================
-
-console.log("RZXXY AI Chat System Loaded");
-
+async function sendMessage(){const text=input.value.trim();if(!text||isLoading)return;addMessage(text,"user");input.value="";isLoading=true;sendBtn.disabled=true;sendBtn.style.opacity="0.5";typing.style.display="block";await new Promise(resolve=>setTimeout(resolve,500));addMessage(localReply(text),"bot");typing.style.display="none";isLoading=false;sendBtn.disabled=false;sendBtn.style.opacity="1";messages.scrollTop=messages.scrollHeight;input.focus();}
+function quickAsk(text){if(isLoading)return;input.value=text;sendMessage();}
+input.addEventListener("keydown",event=>{if(event.key==="Enter"){event.preventDefault();sendMessage();}});
+console.log("RZXXY AI Demo Mode loaded — no API required.");
 </script>
 
