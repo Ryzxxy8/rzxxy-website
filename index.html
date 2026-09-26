@@ -1,89 +1,710 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Rzxxy Website</title>
+<title>RZXXY AI | Future Starts Here</title>
 
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #0a0a0a;
-            color: white;
-            text-align: center;
-        }
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-        header {
-            padding: 25px;
-            font-size: 24px;
-            font-weight: bold;
-            color: #00ffff;
-        }
+:root {
+    --bg: #050510;
+    --cyan: #00f5ff;
+    --purple: #8b5cf6;
+    --text: #ffffff;
+    --muted: #a1a1b5;
+}
 
-        .hero {
-            padding: 100px 20px;
-        }
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: Arial, sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
 
-        h1 {
-            font-size: 42px;
-        }
+/* Animated background */
 
-        p {
-            color: #aaa;
-            font-size: 18px;
-        }
+body::before {
+    content: "";
+    position: fixed;
+    width: 600px;
+    height: 600px;
+    background: var(--purple);
+    filter: blur(180px);
+    opacity: 0.18;
+    top: -200px;
+    left: -150px;
+    z-index: -1;
+    animation: float 10s infinite alternate;
+}
 
-        button {
-            background: #00ffff;
-            color: black;
-            padding: 15px 30px;
-            border: none;
-            border-radius: 30px;
-            font-size: 16px;
-            font-weight: bold;
-        }
+body::after {
+    content: "";
+    position: fixed;
+    width: 500px;
+    height: 500px;
+    background: var(--cyan);
+    filter: blur(180px);
+    opacity: 0.12;
+    bottom: -200px;
+    right: -150px;
+    z-index: -1;
+    animation: float 8s infinite alternate-reverse;
+}
 
-        footer {
-            padding: 30px;
-            color: #666;
-        }
-    </style>
+@keyframes float {
+    from { transform: translate(0, 0); }
+    to { transform: translate(80px, 60px); }
+}
+
+/* Navigation */
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 25px 8%;
+    border-bottom: 1px solid #ffffff12;
+    backdrop-filter: blur(15px);
+}
+
+.logo {
+    color: var(--cyan);
+    font-size: 26px;
+    font-weight: 900;
+    letter-spacing: 3px;
+    text-shadow: 0 0 20px #00f5ff70;
+}
+
+.status {
+    font-size: 13px;
+    color: #a5ffcb;
+}
+
+.status span {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background: #00ff88;
+    border-radius: 50%;
+    margin-right: 7px;
+    box-shadow: 0 0 12px #00ff88;
+}
+
+/* Hero */
+
+.hero {
+    text-align: center;
+    padding: 85px 20px 45px;
+    animation: appear 1s ease;
+}
+
+@keyframes appear {
+    from {
+        opacity: 0;
+        transform: translateY(25px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.badge {
+    display: inline-block;
+    border: 1px solid #00f5ff55;
+    color: var(--cyan);
+    background: #00f5ff0c;
+    padding: 10px 20px;
+    border-radius: 50px;
+    font-size: 12px;
+    letter-spacing: 2px;
+    margin-bottom: 25px;
+}
+
+h1 {
+    font-size: clamp(40px, 8vw, 76px);
+    line-height: 1.15;
+    font-weight: 900;
+    margin-bottom: 20px;
+}
+
+.gradient {
+    background: linear-gradient(
+        90deg,
+        #00f5ff,
+        #8b5cf6,
+        #ff4ecd,
+        #00f5ff
+    );
+    background-size: 300%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: gradient 5s linear infinite;
+}
+
+@keyframes gradient {
+    from { background-position: 0%; }
+    to { background-position: 300%; }
+}
+
+.subtitle {
+    max-width: 550px;
+    margin: auto;
+    color: var(--muted);
+    font-size: 17px;
+    line-height: 1.8;
+}
+
+/* AI Chat */
+
+.chat-section {
+    max-width: 750px;
+    margin: 20px auto 90px;
+    padding: 0 20px;
+}
+
+.chat-card {
+    border: 1px solid #ffffff20;
+    background: #10101bba;
+    backdrop-filter: blur(20px);
+    border-radius: 25px;
+    overflow: hidden;
+    box-shadow: 0 0 60px #00f5ff0b;
+    transition: border-color 0.3s;
+}
+
+.chat-card:hover {
+    border-color: #00f5ff55;
+}
+
+.chat-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 22px;
+    border-bottom: 1px solid #ffffff15;
+}
+
+.ai-icon {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, #00f5ff, #8b5cf6);
+    border-radius: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #050510;
+    font-size: 23px;
+    font-weight: bold;
+    box-shadow: 0 0 25px #00f5ff40;
+}
+
+.chat-header h3 {
+    font-size: 17px;
+    margin-bottom: 5px;
+}
+
+.chat-header p {
+    font-size: 12px;
+    color: #a1a1b5;
+}
+
+.chat-messages {
+    height: 340px;
+    overflow-y: auto;
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    scroll-behavior: smooth;
+}
+
+.message {
+    max-width: 85%;
+    padding: 15px 18px;
+    border-radius: 18px;
+    font-size: 15px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+    animation: appear 0.3s ease;
+    white-space: pre-wrap;
+}
+
+.bot {
+    align-self: flex-start;
+    background: #ffffff0b;
+    border: 1px solid #ffffff12;
+    border-bottom-left-radius: 4px;
+}
+
+.user {
+    align-self: flex-end;
+    background: linear-gradient(135deg, #087e91, #6042b9);
+    border-bottom-right-radius: 4px;
+}
+
+.typing {
+    color: var(--cyan);
+    font-size: 13px;
+    padding: 0 22px 15px;
+    display: none;
+}
+
+.chat-input-area {
+    padding: 18px;
+    border-top: 1px solid #ffffff15;
+}
+
+.input-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #080812;
+    border: 1px solid #ffffff20;
+    border-radius: 16px;
+    padding: 8px 8px 8px 18px;
+    transition: border-color 0.3s;
+}
+
+.input-box:focus-within {
+    border-color: var(--cyan);
+    box-shadow: 0 0 20px #00f5ff12;
+}
+
+input {
+    background: transparent;
+    color: white;
+    border: none;
+    outline: none;
+    flex: 1;
+    min-width: 0;
+    font-size: 15px;
+    padding: 12px 0;
+}
+
+input::placeholder {
+    color: #68687d;
+}
+
+.send-btn {
+    width: 46px;
+    height: 46px;
+    border: none;
+    border-radius: 13px;
+    background: var(--cyan);
+    color: #050510;
+    font-size: 22px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.send-btn:hover {
+    transform: scale(1.08);
+    box-shadow: 0 0 25px #00f5ff80;
+}
+
+.send-btn:active {
+    transform: scale(0.95);
+}
+
+.suggestions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.suggestion {
+    border: 1px solid #ffffff20;
+    background: #ffffff08;
+    color: #b7b7cb;
+    padding: 9px 14px;
+    border-radius: 30px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.suggestion:hover {
+    border-color: var(--cyan);
+    color: var(--cyan);
+    background: #00f5ff0b;
+}
+
+/* Features */
+
+.features {
+    max-width: 1000px;
+    margin: 0 auto 90px;
+    padding: 0 20px;
+}
+
+.features h2 {
+    text-align: center;
+    font-size: 32px;
+    margin-bottom: 35px;
+}
+
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.feature {
+    background: #ffffff06;
+    border: 1px solid #ffffff15;
+    border-radius: 20px;
+    padding: 30px 24px;
+    transition: 0.3s;
+}
+
+.feature:hover {
+    transform: translateY(-8px);
+    border-color: #00f5ff70;
+    box-shadow: 0 10px 40px #00f5ff0c;
+}
+
+.feature-icon {
+    font-size: 30px;
+    margin-bottom: 20px;
+}
+
+.feature h3 {
+    margin-bottom: 12px;
+    font-size: 18px;
+}
+
+.feature p {
+    color: var(--muted);
+    line-height: 1.7;
+    font-size: 14px;
+}
+
+footer {
+    text-align: center;
+    padding: 30px 20px;
+    border-top: 1px solid #ffffff10;
+    color: #68687d;
+    font-size: 13px;
+}
+
+/* Mobile */
+
+@media (max-width: 650px) {
+    nav {
+        padding: 20px;
+    }
+
+    .hero {
+        padding: 65px 20px 35px;
+    }
+
+    .subtitle {
+        font-size: 15px;
+    }
+
+    .chat-messages {
+        height: 350px;
+        padding: 16px;
+    }
+
+    .chat-section {
+        padding: 0 12px;
+    }
+
+    .feature-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .features h2 {
+        font-size: 27px;
+    }
+
+    .message {
+        max-width: 92%;
+        font-size: 14px;
+    }
+}
+</style>
 </head>
 
 <body>
 
-    <header>
-        RZXXY
-    </header>
+<nav>
+    <div class="logo">RZXXY</div>
 
-    <section class="hero">
+    <div class="status">
+        <span></span> SYSTEM ONLINE
+    </div>
+</nav>
 
-        <h1>Welcome to My Website</h1>
+<section class="hero">
 
-        <p>
-            My first website built with GitHub and Vercel.
-        </p>
+    <div class="badge">
+        ✦ NEXT GENERATION AI
+    </div>
 
-        <button onclick="showMessage()">
-            Get Started
-        </button>
+    <h1>
+        Welcome to My<br>
+        <span class="gradient">AI Universe.</span>
+    </h1>
 
-        <p id="message"></p>
+    <p class="subtitle">
+        Explore the future with RZXXY AI.
+        Chat, discover ideas, and experience
+        a new digital world.
+    </p>
 
-    </section>
+</section>
 
-    <footer>
-        © 2026 Rzxxy. All rights reserved.
-    </footer>
+<section class="chat-section">
 
-    <script>
-        function showMessage() {
-            document.getElementById("message").innerText =
-                "Welcome! Website is working!";
-        }
-    </script>
+    <div class="chat-card">
+
+        <div class="chat-header">
+
+            <div class="ai-icon">✦</div>
+
+            <div>
+                <h3>RZXXY AI Assistant</h3>
+                <p>Demo AI · Ready to chat</p>
+            </div>
+
+        </div>
+
+        <div class="chat-messages" id="messages">
+
+            <div class="message bot">
+                မင်္ဂလာပါ! 👋
+
+                I'm RZXXY AI, your digital assistant.
+
+                မင်းဘာသိချင်လဲ? မေးခွန်းမေးကြည့်ပါ။
+            </div>
+
+        </div>
+
+        <div class="typing" id="typing">
+            AI is thinking...
+        </div>
+
+        <div class="chat-input-area">
+
+            <div class="input-box">
+
+                <input
+                    id="userInput"
+                    type="text"
+                    placeholder="Ask me anything..."
+                    autocomplete="off"
+                >
+
+                <button
+                    class="send-btn"
+                    onclick="sendMessage()"
+                    aria-label="Send message"
+                >
+                    ↑
+                </button>
+
+            </div>
+
+            <div class="suggestions">
+
+                <button class="suggestion"
+                    onclick="quickAsk('မင်းဘာလုပ်နိုင်လဲ?')">
+                    What can you do?
+                </button>
+
+                <button class="suggestion"
+                    onclick="quickAsk('Give me a business idea')">
+                    Business Ideas
+                </button>
+
+                <button class="suggestion"
+                    onclick="quickAsk('Tell me about AI')">
+                    About AI
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section class="features">
+
+    <h2>Explore The Future</h2>
+
+    <div class="feature-grid">
+
+        <div class="feature">
+            <div class="feature-icon">🤖</div>
+            <h3>AI Assistant</h3>
+            <p>
+                Chat with your digital assistant
+                and explore new ideas.
+            </p>
+        </div>
+
+        <div class="feature">
+            <div class="feature-icon">⚡</div>
+            <h3>Next Gen Design</h3>
+            <p>
+                Experience a futuristic interface
+                with smooth animations.
+            </p>
+        </div>
+
+        <div class="feature">
+            <div class="feature-icon">🌐</div>
+            <h3>Always Online</h3>
+            <p>
+                Access your website from
+                your phone or computer.
+            </p>
+        </div>
+
+    </div>
+
+</section>
+
+<footer>
+    © 2026 RZXXY. All rights reserved.
+    <br><br>
+    Built for the future.
+</footer>
+
+<script>
+
+const input = document.getElementById("userInput");
+const messages = document.getElementById("messages");
+const typing = document.getElementById("typing");
+
+function addMessage(text, type) {
+
+    const div = document.createElement("div");
+
+    div.className = "message " + type;
+
+    // Display text safely
+    div.textContent = text;
+
+    messages.appendChild(div);
+
+    messages.scrollTop = messages.scrollHeight;
+}
+
+function getAIResponse(text) {
+
+    const msg = text.toLowerCase();
+
+    if (
+        msg.includes("hello") ||
+        msg.includes("hi") ||
+        msg.includes("မင်္ဂလာ")
+    ) {
+        return "မင်္ဂလာပါ! 👋 RZXXY AI မှ ကြိုဆိုပါတယ်။ ဘာကူညီပေးရမလဲ?";
+    }
+
+    if (
+        msg.includes("who are you") ||
+        msg.includes("မင်းဘယ်သူ")
+    ) {
+        return "I'm RZXXY AI, a demo chatbot created for the RZXXY website. 🤖";
+    }
+
+    if (
+        msg.includes("what can you do") ||
+        msg.includes("ဘာလုပ်နိုင်")
+    ) {
+        return "လက်ရှိ Demo Version မှာ အခြေခံမေးခွန်းတွေကို ဖြေပေးနိုင်တယ်။ တကယ့် AI API ချိတ်ဆက်ပြီးရင် ပိုမိုအဆင့်မြင့်တဲ့ မေးခွန်းတွေကို ဖြေနိုင်မယ်။";
+    }
+
+    if (
+        msg.includes("business") ||
+        msg.includes("စီးပွား") ||
+        msg.includes("လုပ်ငန်း")
+    ) {
+        return "💡 Business Idea: Online မှာ အမျိုးသား T-shirt တွေကို Pre-order စနစ်နဲ့ ရောင်းချကြည့်ပါ။ Sample အနည်းငယ်နဲ့ စပြီး Customer ရှာနိုင်တယ်။";
+    }
+
+    if (
+        msg.includes("ai") ||
+        msg.includes("artificial intelligence")
+    ) {
+        return "AI ဆိုတာ Artificial Intelligence ပါ။ စာရေးခြင်း၊ ဘာသာပြန်ခြင်း၊ ပုံဖန်တီးခြင်းနဲ့ Coding တို့မှာ အသုံးပြုနိုင်တယ်။";
+    }
+
+    if (
+        msg.includes("website") ||
+        msg.includes("vercel") ||
+        msg.includes("github")
+    ) {
+        return "🌐 မင်းရဲ့ Website ကို GitHub မှာ Code သိမ်းပြီး Vercel နဲ့ Deploy လုပ်ထားတာပါ။ Code ပြင်ပြီး Commit လုပ်ရင် Vercel က ပြန် Deploy လုပ်ပေးနိုင်တယ်။";
+    }
+
+    if (
+        msg.includes("thank")
+    ) {
+        return "You're welcome! 😊 မေးချင်တာရှိရင် ထပ်မေးနိုင်ပါတယ်။";
+    }
+
+    return "စိတ်ဝင်စားစရာ မေးခွန်းပါ! 😊 လက်ရှိ RZXXY AI က Demo Version ဖြစ်လို့ အခြေခံမေးခွန်းတွေကိုပဲ ဖြေနိုင်သေးတယ်။ တကယ့် AI API ချိတ်ဆက်ပြီးရင် ပိုမိုအသိဉာဏ်ရှိတဲ့ အဖြေတွေ ပေးနိုင်မယ်။";
+}
+
+function sendMessage() {
+
+    const text = input.value.trim();
+
+    if (!text) return;
+
+    addMessage(text, "user");
+
+    input.value = "";
+
+    typing.style.display = "block";
+
+    messages.scrollTop = messages.scrollHeight;
+
+    setTimeout(() => {
+
+        typing.style.display = "none";
+
+        const reply = getAIResponse(text);
+
+        addMessage(reply, "bot");
+
+    }, 900);
+}
+
+function quickAsk(text) {
+    input.value = text;
+    sendMessage();
+}
+
+input.addEventListener("keydown", function(event) {
+
+    if (event.key === "Enter") {
+        sendMessage();
+    }
+
+});
+
+</script>
 
 </body>
 </html>
