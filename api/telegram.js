@@ -12,12 +12,20 @@ export default async function handler(req, res) {
     return res.status(500).send("Missing environment variables");
   }
 
-  if (
-    req.headers["x-telegram-bot-api-secret-token"] !== secret
-  ) {
-    return res.status(401).send("Unauthorized");
-  }
+  const receivedSecret =
+  req.headers["x-telegram-bot-api-secret-token"];
 
+console.log("Webhook debug:", {
+  hasEnvSecret: Boolean(secret),
+  hasReceivedSecret: Boolean(receivedSecret),
+  envSecretLength: secret?.length || 0,
+  receivedSecretLength: receivedSecret?.length || 0,
+  secretsMatch: receivedSecret === secret
+});
+
+if (!secret || receivedSecret !== secret) {
+  return res.status(401).send("Unauthorized");
+}
   const message = req.body?.message;
   const chatId = message?.chat?.id;
   const text = message?.text;
