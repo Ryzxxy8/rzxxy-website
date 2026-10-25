@@ -633,8 +633,60 @@ function localReply(text){
  if(/thank|ကျေးဇူး/.test(q)) return "ရပါတယ်! 😊 နောက်ထပ်မေးခွန်းရှိရင် မေးနိုင်ပါတယ်။";
  return "ဒီ RZXXY AI က API မသုံးတဲ့ Demo Mode ဖြစ်ပါတယ်။ အခုမေးခွန်းအတွက် live AI အဖြေမထုတ်နိုင်သေးပါဘူး။ API ချိတ်ဆက်မှုမရှိဘဲ ကြိုတင်သတ်မှတ်ထားတဲ့ ဥပမာအဖြေတွေကိုသာ ပြန်ပေးနိုင်ပါတယ်။";
 }
-async function sendMessage(){const text=input.value.trim();if(!text||isLoading)return;addMessage(text,"user");input.value="";isLoading=true;sendBtn.disabled=true;sendBtn.style.opacity="0.5";typing.style.display="block";await new Promise(resolve=>setTimeout(resolve,500));addMessage(localReply(text),"bot");typing.style.display="none";isLoading=false;sendBtn.disabled=false;sendBtn.style.opacity="1";messages.scrollTop=messages.scrollHeight;input.focus();}
-function quickAsk(text){if(isLoading)return;input.value=text;sendMessage();}
+async function sendMessage() {
+    const text = input.value.trim();
+
+    if (!text || isLoading) return;
+
+    addMessage(text, "user");
+    input.value = "";
+
+    isLoading = true;
+    sendBtn.disabled = true;
+    sendBtn.style.opacity = "0.5";
+    typing.style.display = "block";
+
+    try {
+        const response = await fetch("/api/chat", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                message: text
+            })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                data.error || "AI request failed"
+            );
+        }
+
+        addMessage(
+            data.reply || "အဖြေမရရှိပါ။",
+            "bot"
+        );
+
+    } catch (error) {
+        console.error("RZXXY AI error:", error);
+
+        addMessage(
+            "AI နဲ့ ချိတ်ဆက်လို့မရသေးပါဘူး။ ခဏနေ ပြန်စမ်းကြည့်ပါ။",
+            "bot"
+        );
+
+    } finally {
+        typing.style.display = "none";
+        isLoading = false;
+        sendBtn.disabled = false;
+        sendBtn.style.opacity = "1";
+        messages.scrollTop = messages.scrollHeight;
+        input.focus();
+    }
+}
 input.addEventListener("keydown",event=>{if(event.key==="Enter"){event.preventDefault();sendMessage();}});
 console.log("RZXXY AI Demo Mode loaded — no API required.");
 </script>
